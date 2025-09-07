@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, cupcake;
+}
+
+@theme {
+  --color-student: #1e93ab;
+}
+
+* {
+  user-select: none;
+}
+
+/* Tailwind + custom CSS */
+.animated-btn::before {
+  content: "";
+  @apply absolute -inset-1 rounded-xl z-[-1] blur-md;
+  background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc, #ffdd00);
+  background-size: 400% 400%;
+  animation: borderAnim 6s linear infinite;
+}
+
+.animated-btn::after {
+  content: "";
+  @apply absolute inset-0 rounded-xl z-[-1] bg-gray-900;
+}
+
+@keyframes borderAnim {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-btn::before {
+  content: "";
+  @apply absolute -inset-1 rounded-xl z-[-10]; /* push behind everything */
+  background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc, #ffdd00);
+  background-size: 200% 200%;
+  animation: borderAnimaBtn 6s linear infinite;
+}
