@@ -74,16 +74,14 @@ const Controllter = () => {
     <div className="min-h-screen bg-base-200 flex flex-col md:flex-row">
       {/* Sidebar */}
       {loader || rankers.length === 0 ? (
-        <div className="w-full md:w-64 skeleton  p-6 flex flex-col rounded-xl">
-  
-        </div>
+        <div className="w-full md:w-64 skeleton  p-6 flex flex-col rounded-xl"></div>
       ) : (
-        <aside className="w-full md:w-64 bg-base-100 shadow-lg p-6 flex flex-col rounded-xl">
+        <aside className="w-full md:w-68 max-h-[550px] overflow-y-scroll bg-base-100 shadow-lg p-6 flex flex-col rounded-xl">
           <h2 className="text-2xl font-bold mb-6 text-primary">
             🏆 Leaderboard
           </h2>
 
-          <nav className="grid grid-cols-2 md:flex md:flex-col gap-4">
+          <nav className="grid grid-cols-2 md:grid-cols-1 md:flex md:flex-col gap-4">
             {rankers
               .filter((r) => r.personalInfo.role !== "teacher")
               .map((rank, i) => {
@@ -92,6 +90,8 @@ const Controllter = () => {
                   "text-gray-400",
                   "text-orange-500",
                 ];
+
+                if (i > 4) return;
 
                 return (
                   <motion.div
@@ -102,8 +102,8 @@ const Controllter = () => {
                     transition={{ delay: i * 0.1 }}
                   >
                     {/* Avatar */}
-                    <div className="avatar">
-                      <div className="w-12 h-12 rounded-full ring ring-primary ring-offset-2">
+                    <div className="avatar hidden md:block">
+                      <div className="w-12 h-12  rounded-full ring ring-primary ring-offset-2">
                         <Link to={`profile/${rank.personalInfo.uid}`}>
                           <img
                             src={
@@ -134,10 +134,7 @@ const Controllter = () => {
                       <div className="flex md:flex-col gap-1">
                         <span className="badge badge-sm badge-accent mt-1">
                           {rank?.gamification?.ecoRank.split(" ")[1] ||
-                            "Eco Learner"}
-                        </span>
-                        <span className="badge badge-sm badge-warning mt-1 p-2">
-                          {rank?.personalInfo?.role}
+                            "Learner"}
                         </span>
                       </div>
                     </div>
@@ -170,7 +167,7 @@ const Controllter = () => {
           {widgets.map((w, index) => (
             <motion.div
               key={w.name}
-              className={`card shadow-xl cursor-pointer ${w.color}`}
+              className={`card shadow-xl cursor-pointer overflow-hidden ${w.color}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.15 }}

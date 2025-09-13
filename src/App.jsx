@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Public from "./pages/public/Public";
 import AuthLayOut from "./pages/public/AuthLayOut";
@@ -11,12 +11,21 @@ import Profile from "./pages/private/Profile";
 import Loader from "./components/Loader";
 import Games from "./pages/private/Games";
 import VerifyUser from "./pages/private/verify";
+import Settings from "./pages/private/Settings";
+import Activity from "./pages/private/Activity";
 
 const App = () => {
   const navigate = useNavigate();
   const { user, setUser, loader } = useAuth();
 
   console.log(user);
+
+  useEffect(() => {
+    if (localStorage.getItem("theme")) {
+      const theme = localStorage.getItem("theme");
+      document.querySelector("html").setAttribute("data-theme", theme);
+    }
+  }, [loader]);
 
   if (loader) {
     return (
@@ -28,7 +37,7 @@ const App = () => {
 
   return (
     <div>
-      <Toaster />
+      <Toaster></Toaster>
 
       <Routes>
         {/* public */}
@@ -58,6 +67,8 @@ const App = () => {
           <Route path="profile/:id" element={<Profile />} />
           <Route path="Games" element={<Games />} />
           <Route path="verification" element={<VerifyUser />} />
+          <Route path="Settings" element={<Settings />} />
+          <Route path="Activity" element={<Activity />} />
         </Route>
 
         <Route path="*" element={<div>Not Found 404</div>} />

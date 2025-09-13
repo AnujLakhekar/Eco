@@ -27,40 +27,37 @@ const ControlPanel = () => {
   return (
     <div className="min-h-screen bg-base-200 text-base-content">
       {/* Header */}
-      <header className="navbar bg-base-100 shadow-md sticky top-0 z-50">
+      <header className="navbar bg-base-100 shadow-md sticky top-0 z-50 px-4">
+        {/* Brand */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
           className="flex-1 text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent select-none"
         >
-          Eco<span className="text-primary">Quest</span>
+          Eco
         </motion.div>
 
         {/* User Menu */}
         {user.auth && (
-          <div className="relative">
-            {user.get?.personalInfo?.verified ? (
-              ""
-            ) : (
-              <motion.button
-                className="relative right-6 bg-accent text-base-100 rounded-lg cursor-pointer  p-2 "
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
+          <div className="relative flex items-center gap-3">
+            {/* Verify button */}
+            {!user.get?.personalInfo?.verified && (
+              <Link
+                to="verification"
+                className="btn btn-sm btn-accent text-base-100"
               >
-               <Link to="verification" >Verify</Link>
-              </motion.button>
+                Verify
+              </Link>
             )}
 
+            {/* Avatar button */}
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setMenuOpen(!menuOpen)}
-              className={
-                "btn btn-ghost btn-circle avatar " + `${roleTheme.border}`
-              }
+              className="btn btn-ghost btn-circle avatar"
             >
-              <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 ">
+              <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                 <img
                   src={`https://ui-avatars.com/api/?name=${user.get?.personalInfo?.fullName}`}
                   alt="avatar"
@@ -76,42 +73,41 @@ const ControlPanel = () => {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: -8 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute right-0 mt-5 w-80 card bg-base-100 shadow-xl border border-base-300 z-50 "
+                  className="absolute top-12 right-0 mt-3 w-80 card bg-base-100 shadow-lg border border-base-300 z-50"
                 >
-                  <div className="card-body p-5">
+                  <div className="card-body p-5 space-y-4">
                     {/* Profile Info */}
                     <div
-                      className={
-                        "flex items-center gap-4 mb-4 p-3 rounded-2xl " +
-                        `${roleTheme.bg}`
-                      }
+                      className={`flex items-center gap-4 p-3 rounded-xl ${roleTheme.bg}`}
                     >
                       <div
                         className={`w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold ${roleTheme.badge}`}
                       >
                         {user.get?.personalInfo?.fullName?.[0] || <UserIcon />}
                       </div>
-                      <div>
-                        <h2 className="card-title text-lg">
+                      <div className="overflow-hidden">
+                        <h2 className="card-title text-lg truncate">
                           {user.get?.personalInfo?.fullName || "Unknown User"}
                         </h2>
                         <p className="text-sm opacity-70 truncate">
                           {user.get?.personalInfo?.email}
                         </p>
-                        <div className={`badge mt-2 ${roleTheme.badge}`}>
+                        <span className={`badge mt-2 ${roleTheme.badge}`}>
                           {user.get?.personalInfo?.role || "Guest"}
-                        </div>
+                        </span>
                       </div>
                     </div>
 
                     {/* Details */}
-                    <div className="space-y-1 text-sm">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                       <p>
-                        <span className="font-medium">School/College:</span>{" "}
+                        <span className="font-medium">College:</span>
+                        <br />
                         {user.get?.personalInfo?.schoolOrCollege || "Not set"}
                       </p>
                       <p>
-                        <span className="font-medium">Location:</span>{" "}
+                        <span className="font-medium">Location:</span>
+                        <br />
                         {user.get?.personalInfo?.location || "Not provided"}
                       </p>
                       <p>
@@ -122,33 +118,31 @@ const ControlPanel = () => {
                         <span className="font-medium">Points:</span>{" "}
                         {user.get?.gamification?.points}
                       </p>
-                      <p>
+                      <p className="col-span-2">
                         <span className="font-medium">Eco Rank:</span>{" "}
                         {user.get?.gamification?.ecoRank}
                       </p>
-                      <div className="mt-3 flex justify-between items-center">
-                        <p className="text-xs">
-                          <span className="text-primary font-bold">
-                            Joined:{" "}
-                          </span>
-                          {new Date(
-                            user.get?.personalInfo?.joinedAt
-                          ).toDateString()}
-                        </p>
-                        <button
-                          onClick={() =>
-                            navigate(
-                              "/app/profile/" + user.get.personalInfo.uid
-                            )
-                          }
-                          className="btn btn-sm btn-primary"
-                        >
-                          Edit
-                        </button>
-                      </div>
                     </div>
 
-                    <div className="divider"></div>
+                    {/* Joined + Edit */}
+                    <div className="flex justify-between items-center text-xs">
+                      <p className="opacity-70">
+                        Joined:{" "}
+                        {new Date(
+                          user.get?.personalInfo?.joinedAt
+                        ).toDateString()}
+                      </p>
+                      <button
+                        onClick={() =>
+                          navigate("/app/profile/" + user.get.personalInfo.uid)
+                        }
+                        className="btn btn-xs btn-primary"
+                      >
+                        Edit
+                      </button>
+                    </div>
+
+                    <div className="divider my-2"></div>
 
                     {/* Logout */}
                     <motion.button

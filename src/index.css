@@ -1,8 +1,7 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, cupcake;
+  themes: all;
 }
-
 @theme {
   --color-student: #1e93ab;
 }
