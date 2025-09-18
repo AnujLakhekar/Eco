@@ -5,7 +5,7 @@ import AuthLayOut from "./pages/public/AuthLayOut";
 import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
 import { useAuth } from "./providers/AuthPrpvider";
-import ControlPanwl from "./pages/private/Home";
+import ControlPanel from "./pages/private/Home";
 import Controller from "./pages/private/controller";
 import Profile from "./pages/private/Profile";
 import Loader from "./components/Loader";
@@ -13,6 +13,7 @@ import Games from "./pages/private/Games";
 import VerifyUser from "./pages/private/verify";
 import Settings from "./pages/private/Settings";
 import Activity from "./pages/private/Activity";
+import GlitchText from "./components/animated/Glitch.jsx";
 
 const App = () => {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const App = () => {
         {/*private*/}
         <Route
           path="/app/"
-          element={user.auth ? <ControlPanwl /> : <Navigate to="/" />}
+          element={user.auth ? <ControlPanel /> : <Navigate to="/" />}
         >
           <Route path="" element={<Controller />} />
           <Route path="profile/:id" element={<Profile />} />
@@ -71,7 +72,7 @@ const App = () => {
           <Route path="Activity" element={<Activity />} />
         </Route>
 
-        <Route path="*" element={<div>Not Found 404</div>} />
+        <Route path="*" element={<div><GlitchText>404</GlitchText></div>} />
       </Routes>
     </div>
   );
