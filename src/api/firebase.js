@@ -128,6 +128,24 @@ export async function getColleges() {
   }
 }
 
+
+export async function report(by, reason, to) {
+  try {
+    const reportRef = doc(db, "reports", `${by?.get.personalInfo.uid}-${to?.personalInfo.uid}`);
+
+    await setDoc(reportRef, {
+       reason:  reason,
+       by: by,
+       to: to
+    })
+
+
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
 // Sign In with Email
 export async function signInWithCredentials(email, password) {
   const userCredential = await signInWithEmailAndPassword(

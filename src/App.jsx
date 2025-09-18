@@ -14,6 +14,7 @@ import VerifyUser from "./pages/private/verify";
 import Settings from "./pages/private/Settings";
 import Activity from "./pages/private/Activity";
 import GlitchText from "./components/animated/Glitch.jsx";
+import Analytic from "./pages/private/Analytic.jsx";
 
 const App = () => {
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ const App = () => {
           <Route path="Games" element={<Games />} />
           <Route path="verification" element={<VerifyUser />} />
           <Route path="Settings" element={<Settings />} />
+          <Route path="analytics/:id" element={<Analytic /> } />
           <Route path="Activity" element={<Activity />} />
         </Route>
 

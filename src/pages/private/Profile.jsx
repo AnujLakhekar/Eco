@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../providers/AuthPrpvider";
 import Loader from "../../components/Loader";
-import { Link, useParams } from "react-router-dom";
+import { Link, Links, useParams } from "react-router-dom";
 import { getColleges, getData, updateProfileData } from "../../api/firebase";
 import { roleStyles } from "../../constant";
 import UserSkeleton from "../../components/skeleton/UserSkeleTon";
@@ -35,6 +35,7 @@ const Profile = () => {
   const [isEditing, setisEditing] = useState(false);
   const [Fetching, setFetching] = useState(false);
   const { id } = useParams();
+  const [isTearcher, setIsTeacher] = useState(false);
 
   // Fetch user data
   useEffect(() => {
@@ -56,6 +57,7 @@ const Profile = () => {
         console.error("Error fetching user:", err);
       } finally {
         setFetching(false);
+        setIsTeacher(AuthUser.get.personalInfo.role === "teacher");
       }
     };
 
@@ -381,76 +383,92 @@ const Profile = () => {
           </>
         ) : (
           /* Same structure for non-author view, also responsive */
-            <div
-              className={`w-full p-4 sm:p-6 md:p-8 rounded-2xl shadow-xl ${cardGradient}`}
-            >
-              {/* Header */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6">
-                <img
-                  src={
-                    user.personalInfo.avatar ||
-                    `https://ui-avatars.com/api/?name=${user.personalInfo.fullName}`
-                  }
-                  alt="avatar"
-                  className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 ${avatarGlow}`}
-                />
-                <div className="text-center sm:text-left">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center justify-center sm:justify-start gap-2">
-                    {user.personalInfo.fullName} {crown}
-                  </h2>
-                  <p className="text-gray-200">{user.personalInfo.email}</p>
-                  <div
-                    className={`inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold border ${
-                      roleStyles[user.personalInfo.role]?.bg || "bg-black"
-                    } ${
-                      roleStyles[user.personalInfo.role]?.text || "text-white"
-                    }`}
-                  >
-                    {user.personalInfo.role}
-                  </div>
-                </div>
-              </div>
-
-              <hr className="border-gray-400 my-4" />
-
-              {/* Profile Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-white">
-                <p>
-                  <strong>School/College:</strong>{" "}
-                  {user.personalInfo.schoolOrCollege}
-                </p>
-                <p>
-                  <strong>Location:</strong> {user.personalInfo.location}
-                </p>
-                <p>
-                  <strong>Level:</strong> {level}
-                </p>
-                <p>
-                  <strong>Points:</strong> {points}
-                </p>
-                <p>
-                  <strong>Eco Rank:</strong> {ecoTitle}
-                </p>
-                <p>
-                  <strong>Joined:</strong>{" "}
-                  {new Date(user.personalInfo.joinedAt).toDateString()}
-                </p>
-              </div>
-
-              {/* Progress bar */}
-              <div className="mt-4">
-                <p className="text-sm text-gray-200 mb-1">
-                  Progress to next level
-                </p>
-                <div className="w-full bg-gray-800 rounded-full h-4">
-                  <div
-                    className="bg-yellow-400 h-4 rounded-full transition-all duration-700"
-                    style={{ width: `${progressPercent}%` }}
-                  ></div>
+          <div
+            className={`w-full p-4 sm:p-6 md:p-8 rounded-2xl shadow-xl ${cardGradient}`}
+          >
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6">
+              <img
+                src={
+                  user.personalInfo.avatar ||
+                  `https://ui-avatars.com/api/?name=${user.personalInfo.fullName}`
+                }
+                alt="avatar"
+                className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 ${avatarGlow}`}
+              />
+              <div className="text-center sm:text-left">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center justify-center sm:justify-start gap-2">
+                  {user.personalInfo.fullName} {crown}
+                </h2>
+                <p className="text-gray-200">{user.personalInfo.email}</p>
+                <div
+                  className={`inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold border ${
+                    roleStyles[user.personalInfo.role]?.bg || "bg-black"
+                  } ${
+                    roleStyles[user.personalInfo.role]?.text || "text-white"
+                  }`}
+                >
+                  {user.personalInfo.role}
                 </div>
               </div>
             </div>
+
+            <hr className="border-gray-400 my-4" />
+
+            {/* Profile Details */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-white">
+              <p>
+                <strong>School/College:</strong>{" "}
+                {user.personalInfo.schoolOrCollege}
+              </p>
+              <p>
+                <strong>Location:</strong> {user.personalInfo.location}
+              </p>
+              <p>
+                <strong>Level:</strong> {level}
+              </p>
+              <p>
+                <strong>Points:</strong> {points}
+              </p>
+              <p>
+                <strong>Eco Rank:</strong> {ecoTitle}
+              </p>
+              <p>
+                <strong>Joined:</strong>{" "}
+                {new Date(user.personalInfo.joinedAt).toDateString()}
+              </p>
+            </div>
+
+            {/* Progress bar */}
+            <div className="mt-4">
+              <p className="text-sm text-gray-200 mb-1">
+                Progress to next level
+              </p>
+              <div className="w-full bg-gray-800 rounded-full h-4">
+                <div
+                  className="bg-yellow-400 h-4 rounded-full transition-all duration-700"
+                  style={{ width: `${progressPercent}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
         )}
+
+        <div>
+          {isTearcher && !isAuthor ? (
+            <>
+              <div>
+                <Link to={`/app/analytics/${user.personalInfo.uid}?accessBy=${AuthUser.get.personalInfo.email}&&Token=${AuthUser.get.personalInfo.uid}}`}>
+                  <button className="bg-base-100 m-2 rounded-lg cursor-pointer p-2">
+                    Analytics
+                  </button>
+                </Link>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );
