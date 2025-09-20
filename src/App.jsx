@@ -15,6 +15,7 @@ import Settings from "./pages/private/Settings";
 import Activity from "./pages/private/Activity";
 import GlitchText from "./components/animated/Glitch.jsx";
 import Analytic from "./pages/private/Analytic.jsx";
+import Task from "./pages/private/Task.jsx";
 
 const App = () => {
   const navigate = useNavigate();
@@ -70,11 +71,20 @@ const App = () => {
           <Route path="Games" element={<Games />} />
           <Route path="verification" element={<VerifyUser />} />
           <Route path="Settings" element={<Settings />} />
-          <Route path="analytics/:id" element={<Analytic /> } />
+          <Route path="analytics/:id" element={<Analytic />} />
           <Route path="Activity" element={<Activity />} />
+          <Route path="tasks/:id" element={<Task />} />
         </Route>
 
-        <Route path="*" element={<div><GlitchText>404</GlitchText></div>} />
+        <Route
+          path="*"
+          element={
+            <div className="w-full h-screen flex justify-center flex-col items-center">
+              <GlitchText enableOnHover={false}>404</GlitchText>
+              <p className="text-neutral-content hidden md:block text-sm md:text-lg">Page you are looking for not found</p>
+            </div>
+          }
+        />
       </Routes>
     </div>
   );

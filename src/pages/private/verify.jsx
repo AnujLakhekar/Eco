@@ -93,6 +93,7 @@ const VerifyUser = () => {
                 className="input input-bordered w-full"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled
               />
               <button
                 type="submit"

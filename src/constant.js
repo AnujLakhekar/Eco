@@ -1,3 +1,5 @@
+import { TreeDeciduous } from "lucide-react";
+
 export const roleStyles = {
   admin: {
     gradient: "from-error to-error-focus",
@@ -28,3 +30,44 @@ export const roleStyles = {
     border: "border border-neutral",
   },
 };
+
+export const challenges = [
+  {
+    name: "Plant a tree with video proof!",
+    id: "plant_tree",
+    label: "Get a badge called planter and 100 points",
+    Icon: ":)",
+    reward: {
+      points: 100,
+      badge: "Planter",
+    },
+    color: "0",
+    link: "/tasks",
+  },
+  {
+    name: "Save Water",
+    id: "save_water",
+    label: "Get a badge called SaveWarrior and 100 points",
+    Icon: "",
+    reward: {
+      points: 70,
+      badge: "SaveWarrior",
+    },
+    color: "0",
+    link: "/tasks",
+  },
+  {
+    name: "Save Electricity",
+    id: "save_electricity",
+    label: "Get a badge called SaveWarrior and 100 points",
+    Icon: "",
+    reward: {
+      points: 70,
+      badge: "Electricity",
+    },
+    color: "0",
+    link: "/tasks",
+  },
+];
+
+

@@ -4,7 +4,7 @@ import React from "react";
 const UserSkeleton = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-base px-4 py-6">
-      <div className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl rounded-2xl shadow-lg p-6 bg-[#222831] animate-pulse">
+      <div className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl rounded-2xl shadow-lg p-6  skeleton">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6">
           {/* Avatar */}

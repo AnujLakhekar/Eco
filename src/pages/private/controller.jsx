@@ -11,6 +11,8 @@ import {
 import { Link } from "react-router-dom";
 import { useAuth } from "../../providers/AuthPrpvider";
 import { GenLeaderBord } from "../../api/firebase";
+import ProfileContainer from "../../components/common/profileContainer";
+import { challenges } from "../../constant";
 
 const Controllter = () => {
   const { user, loader } = useAuth();
@@ -25,34 +27,34 @@ const Controllter = () => {
     fetchRankers();
   }, []);
 
-  const widgets = [
+   const widgets = [
     {
       name: "Games",
       label: "Find and Play Games",
       icon: <Play className="w-6 h-6 text-primary" />,
       color: "bg-primary text-primary-content",
-      link: "Games",
+      link: "games",
     },
     {
       name: "Activity",
       label: "Track your daily works",
       icon: <ClipboardList className="w-6 h-6 text-success" />,
       color: "bg-success text-success-content",
-      link: "Activity",
+      link: "activity",
     },
     {
       name: "Achievements",
       label: "See your progress",
       icon: <Trophy className="w-6 h-6 text-warning" />,
       color: "bg-warning text-warning-content",
-      link: "Achievements",
+      link: "achievements",
     },
     {
       name: "Notifications",
       label: "Stay updated",
       icon: <Bell className="w-6 h-6 text-secondary" />,
       color: "bg-secondary text-secondary-content",
-      link: "Notifications",
+      link: "notifications",
     },
     {
       name: "Profile",
@@ -66,9 +68,9 @@ const Controllter = () => {
       label: "Customize your experience",
       icon: <Settings className="w-6 h-6 text-white" />,
       color: "bg-neutral text-neutral-content",
-      link: "Settings",
+      link: "settings",
     },
-  ];
+  ]; 
 
   return (
     <div className="min-h-screen bg-base-200 flex flex-col md:flex-row">
@@ -105,15 +107,7 @@ const Controllter = () => {
                     <div className="avatar hidden md:block">
                       <div className="w-12 h-12  rounded-full ring ring-primary ring-offset-2">
                         <Link to={`profile/${rank.personalInfo.uid}`}>
-                          <img
-                            src={
-                              rank?.personalInfo?.avatar ||
-                              `https://ui-avatars.com/api/?name=${
-                                rank?.personalInfo?.fullName || "?"
-                              }`
-                            }
-                            alt={rank?.personalInfo?.fullName || "User"}
-                          />
+                          <ProfileContainer user={rank} />
                         </Link>
                       </div>
                     </div>
@@ -163,7 +157,7 @@ const Controllter = () => {
         </div>
 
         {/* Widgets Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10 w-full">
           {widgets.map((w, index) => (
             <motion.div
               key={w.name}
@@ -173,9 +167,11 @@ const Controllter = () => {
               transition={{ delay: index * 0.15 }}
               whileHover={{ scale: 1.05 }}
             >
-              <div className="card-body flex flex-row items-center gap-4">
-                <div className="p-3 rounded-lg bg-base-100/70">{w.icon}</div>
-                <div>
+              <div className="card-body flex flex-col sm:flex-row items-center gap-3 sm:gap-4 p-4 md:p-6">
+                <div className="p-3 rounded-lg bg-base-100/70 mb-2 sm:mb-0">
+                  {w.icon}
+                </div>
+                <div className="flex-1 text-center sm:text-left">
                   <Link className="card-title" to={w.link}>
                     {w.name}
                   </Link>
@@ -184,6 +180,51 @@ const Controllter = () => {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Challenges Container */}
+        <div className="bg-base-100 rounded-xl shadow-lg p-4 sm:p-6 w-full mt-6">
+          <h2 className="text-2xl font-bold mb-4 text-primary flex items-center gap-2">
+            🌱 Challenges
+          </h2>
+          <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
+            {challenges.map((challenge, idx) => (
+              <motion.div
+                key={challenge.name}
+                className="card border border-primary/20 bg-base-200 flex-1 min-w-0"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                whileHover={{ scale: 1.03 }}
+              >
+                <div className="card-body flex flex-col gap-2 p-4 md:p-6">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="text-2xl">{challenge.Icon}</span>
+                    <span className="font-semibold text-lg break-words">
+                      {challenge.name}
+                    </span>
+                  </div>
+                  <p className="text-sm opacity-80 mb-2 break-words">
+                    {challenge.label}
+                  </p>
+                  <div className="flex gap-2 items-center flex-wrap">
+                    <span className="badge badge-success">
+                      +{challenge.reward.points} pts
+                    </span>
+                    <span className="badge badge-accent">
+                      🏅 {challenge.reward.badge}
+                    </span>
+                  </div>
+                  <Link
+                    to={"/app" + challenge.link + "/" + challenge.id}
+                    className="btn btn-primary btn-sm mt-2 w-fit"
+                  >
+                    Take Challenge
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </main>
     </div>

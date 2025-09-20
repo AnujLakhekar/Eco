@@ -114,7 +114,7 @@ export async function GenLeaderBord() {
 
 export async function getColleges() {
   try {
-   const q = query(collection(db, "colleges"));
+    const q = query(collection(db, "colleges"));
     const querySnapshot = await getDocs(q);
 
     const clgArray = querySnapshot.docs.map((doc) => ({
@@ -122,27 +122,27 @@ export async function getColleges() {
       ...doc.data(),
     }));
 
-    return clgArray
+    return clgArray;
   } catch (error) {
     console.log(error);
   }
 }
 
-
 export async function report(by, reason, to) {
   try {
-    const reportRef = doc(db, "reports", `${by?.get.personalInfo.uid}-${to?.personalInfo.uid}`);
+    const reportRef = doc(
+      db,
+      "reports",
+      `${by?.get.personalInfo.uid}-${to?.personalInfo.uid}`
+    );
 
     await setDoc(reportRef, {
-       reason:  reason,
-       by: by,
-       to: to
-    })
-
-
+      reason: reason,
+      by: by,
+      to: to,
+    });
   } catch (error) {
     console.log(error);
-    
   }
 }
 
@@ -154,4 +154,35 @@ export async function signInWithCredentials(email, password) {
     password
   );
   return userCredential.user;
+}
+
+export async function addBadge(badge, uid) {
+  try {
+    if (!badge || !uid) throw new Error("badge and uid are required");
+
+    // Get existing user data
+    const user = await getData(uid);
+    if (!user) throw new Error("User not found");
+
+    const existingBadges = Array.isArray(user?.gamification?.badges)
+      ? user.gamification.badges
+      : [];
+
+    // Avoid duplicates
+    const updatedBadges = existingBadges.includes(badge)
+      ? existingBadges
+      : [...existingBadges, badge];
+
+    // Update only the badges field to avoid overwriting other gamification fields
+    const userRef = doc(db, "users", uid);
+    await updateDoc(userRef, {
+      "gamification.badges": updatedBadges,
+      updatedAt: new Date().toISOString(),
+    });
+
+    return updatedBadges;
+  } catch (error) {
+    console.error("Error adding badge:", error);
+    throw error;
+  }
 }

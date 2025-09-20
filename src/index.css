@@ -2,6 +2,7 @@
 
 @plugin "daisyui" {
     themes: all;
+    
 }
 @theme {
     --color-student: #1e93ab;
@@ -9,6 +10,7 @@
 
 * {
     user-select: none;
+    font-family: sans-serif;
 }
 
 /* Tailwind + custom CSS */

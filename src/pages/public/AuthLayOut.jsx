@@ -62,7 +62,7 @@ export default function AuthLayout({ type }) {
         toast.success("Signed in successfully!");
       }
 
-      navigate(redirect ? `/app/${redirect}` : "/app");
+      navigate(redirect ? `/app/?method${redirect}` : "/app");
     } catch (error) {
       toast.error(error.message);
     }

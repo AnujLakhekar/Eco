@@ -6,6 +6,7 @@ import { signOut } from "firebase/auth";
 import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, User as UserIcon } from "lucide-react";
 import { roleStyles } from "../../constant";
+import ProfileContainer from "../../components/common/profileContainer";
 
 const ControlPanel = () => {
   const { user, loader } = useAuth();
@@ -57,12 +58,7 @@ const ControlPanel = () => {
               onClick={() => setMenuOpen(!menuOpen)}
               className="btn btn-ghost btn-circle avatar"
             >
-              <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img
-                  src={`https://ui-avatars.com/api/?name=${user.get?.personalInfo?.fullName}`}
-                  alt="avatar"
-                />
-              </div>
+              <ProfileContainer  user={user} />
             </motion.button>
 
             {/* Dropdown */}

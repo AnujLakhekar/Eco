@@ -1,139 +1,126 @@
-import React, {useState} from "react";
-import {useAuth} from "../../providers/AuthPrpvider";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../../providers/AuthPrpvider";
 import Loader from "../../components/Loader";
-import {updateProfileData} from "../../api/firebase.js";
+import { updateProfileData } from "../../api/firebase.js";
 
-const supportedThemes = [
-    "light",
-    "dark",
-    "cupcake",
-    "bumblebee",
-    "emerald",
-    "corporate",
-    "synthwave",
-    "retro",
-    "cyberpunk",
-    "valentine",
-    "halloween",
-    "garden",
-    "forest",
-    "aqua",
-    "lofi",
-    "pastel",
-    "fantasy",
-    "wireframe",
-    "black",
-    "luxury",
-    "dracula",
-    "cmyk",
-    "autumn",
-    "business",
-    "acid",
-    "lemonade",
-    "night",
-    "coffee",
-    "winter",
-];
+const supportedThemes = ["light", "dark", "night"];
 
 const Settings = () => {
-    const {user: auth, setUser, loader} = useAuth();
-    const user = auth?.get;
-    const settings = user?.settings;
-    const userInfo = user?.personalInfo;
-    const [saving, setSaving] = useState(false);
+  const { user: auth, setUser, loader } = useAuth();
+  const user = auth?.get;
+  const settings = user?.settings;
+  const userInfo = user?.personalInfo;
+  const [saving, setSaving] = useState(false);
 
-    const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-    const [notifications, setNotifications] = useState(
-        localStorage.getItem("notifications")
-    );
-    const [language, setLanguage] = useState(localStorage.getItem("lang") || "en");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [notifications, setNotifications] = useState(
+    localStorage.getItem("notifications")
+  );
+  const [language, setLanguage] = useState(
+    localStorage.getItem("lang") || "en"
+  );
 
-    if (loader) return <Loader/>;
+  useEffect(() => {
+    const theme = localStorage.getItem("theme")
+      ? localStorage.getItem("theme")
+      : document.querySelector("html").getAttribute("data-theme");
 
-    return (
-        <div className="p-6 max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6">⚙️ Settings</h1>
+    document.querySelector("#selector").value = theme;
+  }, []);
 
-            {/* Theme */}
-            <div className="form-control mb-4 ">
-                <label className="label">
-                    <span className="label-text pr-2">Theme</span>
-                </label>
-                <select
-                    className="select select-bordered"
-                    value={theme}
-                    data-choose-theme
-                    onChange={(e) => {
-                        document.querySelector("html").setAttribute("data-theme", e.target.value);
-                        setTheme(e.target.value);
-                    }}
-                >
-                    {supportedThemes.map((th) => (
-                        <option key={th} value={th}>
-                            {th}
-                        </option>
-                    ))}
-                </select>
-            </div>
+  if (loader) return <Loader />;
 
-            {/* Notifications */}
-            <div className="form-control mb-4">
-                <label className="cursor-pointer label">
-                    <span className="label-text">Enable Notifications</span>
-                    <input
-                        type="checkbox"
-                        className="toggle toggle-primary"
-                        checked={notifications}
-                        onChange={(e) => setNotifications(e.target.checked)}
-                    />
-                </label>
-            </div>
+  return (
+    <div className="p-6 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">⚙️ Settings</h1>
 
-            {/* Language */}
-            <div className="form-control mb-4">
-                <label className="label">
-                    <span className="label-text pr-2">Language</span>
-                </label>
-                <select
-                    className="select select-bordered"
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                >
-                    <option value="en">English</option>
-                    <option value="hi">Hindi</option>
-                    <option value="mr">Marathi</option>
-                </select>
-            </div>
+      {/* Theme */}
+      <div className="form-control mb-4 ">
+        <label className="label">
+          <span className="label-text pr-2">Theme</span>
+        </label>
+        <select
+          id="selector"
+          className="select select-bordered"
+          value={theme}
+          data-choose-theme
+          onChange={(e) => {
+            document
+              .querySelector("html")
+              .setAttribute("data-theme", e.target.value);
+            setTheme(e.target.value);
+          }}
+        >
+          {supportedThemes.map((th) => (
+            <option key={th} value={th}>
+              {th}
+            </option>
+          ))}
+        </select>
+      </div>
 
-            {/* Save Button */}
-            {saving ? (<button
-                className="btn btn-primary w-full" disabled={true}>
-                <span className="loading loading-spinner text-success" ></span>
-            </button>) : (<button
-                className="btn btn-primary w-full"
-                onClick={async () => {
-                    setSaving(true)
+      {/* Notifications */}
+      <div className="form-control mb-4">
+        <label className="cursor-pointer label">
+          <span className="label-text">Enable Notifications</span>
+          <input
+            type="checkbox"
+            className="toggle toggle-primary"
+            checked={notifications}
+            onChange={(e) => setNotifications(e.target.checked)}
+          />
+        </label>
+      </div>
 
-                    setUser((prev) => ({
-                        ...prev,
-                        get: {
-                            ...prev.get,
-                            settings: {theme, notifications, language},
-                        },
-                    }));
-                    localStorage.setItem("theme", theme);
-                    localStorage.setItem("lang", language);
-                    localStorage.setItem("notifications", notifications)
-                    document.querySelector("html").setAttribute("data-theme", theme);
-                    await updateProfileData(auth.get.personalInfo?.uid, auth.get)
+      {/* Language */}
+      <div className="form-control mb-4">
+        <label className="label">
+          <span className="label-text pr-2">Language</span>
+        </label>
+        <select
+          className="select select-bordered"
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
+          <option value="en">English</option>
+          <option value="hi">Hindi</option>
+          <option value="mr">Marathi</option>
+        </select>
+      </div>
 
-                    setSaving(false)
-                }}
-            >
-                Save Changes
-            </button>)}
-        </div>
-    );
+      {/* Save Button */}
+      {saving ? (
+        <button className="btn btn-primary w-full" disabled={true}>
+          <span className="loading loading-spinner text-success"></span>
+        </button>
+      ) : (
+        <button
+          className="btn btn-primary w-full"
+          onClick={async () => {
+            setSaving(true);
+
+            setUser((prev) => ({
+              ...prev,
+              get: {
+                ...prev.get,
+                settings: { theme, notifications, language },
+              },
+            }));
+            localStorage.setItem("theme", theme);
+            localStorage.setItem("lang", language);
+            localStorage.setItem("notifications", notifications);
+            document.querySelector("html").setAttribute("data-theme", theme);
+            await updateProfileData(auth.get.personalInfo?.uid, auth.get);
+
+            setSaving(false);
+            window.location.href = "/app";
+          }}
+        >
+          Save Changes
+        </button>
+      )}
+    </div>
+  );
 };
 
 export default Settings;
