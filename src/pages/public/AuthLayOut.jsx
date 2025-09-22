@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -25,6 +25,7 @@ export default function AuthLayout({ type }) {
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get("redirect");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const UserStructure = {
     personalInfo: {
@@ -45,6 +46,7 @@ export default function AuthLayout({ type }) {
   };
 
   async function handleFormSubmit(e) {
+    setIsLoading(true);
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
@@ -64,14 +66,18 @@ export default function AuthLayout({ type }) {
 
       navigate(redirect ? `/app/?method${redirect}` : "/app");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message.replace("Fiebase:", ""));
+    } finally {
+      setIsLoading(false);
     }
   }
 
+  //from-green-500 via-green-400 to-blue-500
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-500 via-green-400 to-blue-500 p-8">
-      <div className="bg-white shadow-xl rounded-2xl p-10 w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
+    <div className="min-h-screen flex items-center justify-center bg-base-100 p-8">
+      <div className="bg-base-200 shadow-xl rounded-2xl p-10 w-full max-w-md">
+        <h1 className="text-3xl font-bold text-center mb-6 text-base-content">
           {type === "SignIn"
             ? "Sign In to EcoQuest"
             : "Create Your EcoQuest Account"}
@@ -85,21 +91,21 @@ export default function AuthLayout({ type }) {
                 type="text"
                 placeholder="Full Name"
                 required
-                className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-400"
+                className="w-full border rounded-lg p-3 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400"
               />
               <div className="relative w-full">
-                <label className="absolute -top-2 left-3 bg-white px-1 text-sm text-green-600 font-medium">
+                <label className="absolute -top-2 left-3 bg-base-100 px-1 text-sm text-green-600 font-medium">
                   Select Role
                 </label>
                 <select
                   name="role"
-                  className="w-full appearance-none p-3 rounded-xl border-2 border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-300 bg-white text-gray-700 font-medium"
+                  className="w-full appearance-none p-3 rounded-xl border-2 border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-300 bg-base-100 text-base-content font-medium"
                   defaultValue="student"
                 >
                   <option value="student">Student</option>
                   <option value="teacher">Teacher</option>
                 </select>
-                <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+                <span className="absolute  placeholder:text-gray-500 right-4 top-1/2 transform -translate-y-1/2 text-base-content pointer-events-none">
                   ▼
                 </span>
               </div>
@@ -111,21 +117,33 @@ export default function AuthLayout({ type }) {
             type="email"
             placeholder="Email"
             required
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full border rounded-lg p-3 text-base-content  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
           <input
             name="password"
             type="password"
             placeholder="Password"
             required
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full border rounded-lg p-3 text-base-content  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-green-500 via-green-400 to-blue-500 text-white py-3 rounded-lg font-bold hover:from-green-600 hover:via-green-500 hover:to-blue-600 transition"
+            className={
+              "w-full bg-gradient-to-r from-green-500 via-green-400 to-blue-500 text-white py-3 rounded-lg font-bold hover:from-green-600 hover:via-green-500 hover:to-blue-600 transition cursor-pointer" +
+              `${isLoading ? "bg-gray-400" : ""}`
+            }
+            disabled={isLoading}
           >
-            {type === "SignIn" ? "Sign In" : "Sign Up"}
+            <div>
+              {isLoading ? (
+                <div>
+                  <span className="loading bg-primary"></span>
+                </div>
+              ) : (
+                <div>{type === "SignIn" ? "Sign In" : "Sign Up"}</div>
+              )}
+            </div>
           </button>
         </form>
 

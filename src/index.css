@@ -1,173 +1,191 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-    themes: all;
-    
+  themes: all;
 }
 @theme {
-    --color-student: #1e93ab;
+  --color-student: #1e93ab;
 }
 
 * {
-    user-select: none;
-    font-family: sans-serif;
+  user-select: none;
+  font-family: sans-serif;
 }
 
 /* Tailwind + custom CSS */
 .animated-btn::before {
-    content: "";
-    @apply absolute -inset-1 rounded-xl z-[-1] blur-md;
-    background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc, #ffdd00);
-    background-size: 400% 400%;
-    animation: borderAnim 6s linear infinite;
+  content: "";
+  @apply absolute -inset-1 rounded-xl z-[-1] blur-md;
+  background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc, #ffdd00);
+  background-size: 400% 400%;
+  animation: borderAnim 6s linear infinite;
 }
 
 .animated-btn::after {
-    content: "";
-    @apply absolute inset-0 rounded-xl z-[-1] bg-gray-900;
+  content: "";
+  @apply absolute inset-0 rounded-xl z-[-1] bg-gray-900;
 }
 
 @keyframes borderAnim {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .animated-btn::before {
-    content: "";
-    @apply absolute -inset-1 rounded-xl z-[-10];
-    /* push behind everything */
-    background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc, #ffdd00);
-    background-size: 200% 200%;
-    animation: borderAnimaBtn 6s linear infinite;
+  content: "";
+  @apply absolute -inset-1 rounded-xl z-[-10];
+  /* push behind everything */
+  background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc, #ffdd00);
+  background-size: 200% 200%;
+  animation: borderAnimaBtn 6s linear infinite;
 }
 
-
 .glitch {
-    color: #fff;
-    font-size: clamp(2rem, 10vw, 8rem);
-    white-space: nowrap;
-    font-weight: 900;
-    position: relative;
-    margin: 0 auto;
-    user-select: none;
-    cursor: pointer;
+  color: #fff;
+  font-size: clamp(2rem, 10vw, 8rem);
+  white-space: nowrap;
+  font-weight: 900;
+  position: relative;
+  margin: 0 auto;
+  user-select: none;
+  cursor: pointer;
 }
 
 .glitch::after,
 .glitch::before {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    color: #fff;
-    background-color: #060010;
-    overflow: hidden;
-    clip-path: inset(0 0 0 0);
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  color: #fff;
+  background-color: #060010;
+  overflow: hidden;
+  clip-path: inset(0 0 0 0);
 }
 
 .glitch:not(.enable-on-hover)::after {
-    left: 10px;
-    text-shadow: var(--after-shadow, -10px 0 red);
-    animation: animate-glitch var(--after-duration, 3s) infinite linear alternate-reverse;
+  left: 10px;
+  text-shadow: var(--after-shadow, -10px 0 red);
+  animation: animate-glitch var(--after-duration, 3s) infinite linear
+    alternate-reverse;
 }
 
 .glitch:not(.enable-on-hover)::before {
-    left: -10px;
-    text-shadow: var(--before-shadow, 10px 0 cyan);
-    animation: animate-glitch var(--before-duration, 2s) infinite linear alternate-reverse;
+  left: -10px;
+  text-shadow: var(--before-shadow, 10px 0 cyan);
+  animation: animate-glitch var(--before-duration, 2s) infinite linear
+    alternate-reverse;
 }
 
 .glitch.enable-on-hover::after,
 .glitch.enable-on-hover::before {
-    content: '';
-    opacity: 0;
-    animation: none;
+  content: "";
+  opacity: 0;
+  animation: none;
 }
 
 .glitch.enable-on-hover:hover::after {
-    content: attr(data-text);
-    opacity: 1;
-    left: 10px;
-    text-shadow: var(--after-shadow, -10px 0 red);
-    animation: animate-glitch var(--after-duration, 3s) infinite linear alternate-reverse;
+  content: attr(data-text);
+  opacity: 1;
+  left: 10px;
+  text-shadow: var(--after-shadow, -10px 0 red);
+  animation: animate-glitch var(--after-duration, 3s) infinite linear
+    alternate-reverse;
 }
 
 .glitch.enable-on-hover:hover::before {
-    content: attr(data-text);
-    opacity: 1;
-    left: -10px;
-    text-shadow: var(--before-shadow, 10px 0 cyan);
-    animation: animate-glitch var(--before-duration, 2s) infinite linear alternate-reverse;
+  content: attr(data-text);
+  opacity: 1;
+  left: -10px;
+  text-shadow: var(--before-shadow, 10px 0 cyan);
+  animation: animate-glitch var(--before-duration, 2s) infinite linear
+    alternate-reverse;
 }
 
 @keyframes animate-glitch {
-    0% {
-        clip-path: inset(20% 0 50% 0);
-    }
-    5% {
-        clip-path: inset(10% 0 60% 0);
-    }
-    10% {
-        clip-path: inset(15% 0 55% 0);
-    }
-    15% {
-        clip-path: inset(25% 0 35% 0);
-    }
-    20% {
-        clip-path: inset(30% 0 40% 0);
-    }
-    25% {
-        clip-path: inset(40% 0 20% 0);
-    }
-    30% {
-        clip-path: inset(10% 0 60% 0);
-    }
-    35% {
-        clip-path: inset(15% 0 55% 0);
-    }
-    40% {
-        clip-path: inset(25% 0 35% 0);
-    }
-    45% {
-        clip-path: inset(30% 0 40% 0);
-    }
-    50% {
-        clip-path: inset(20% 0 50% 0);
-    }
-    55% {
-        clip-path: inset(10% 0 60% 0);
-    }
-    60% {
-        clip-path: inset(15% 0 55% 0);
-    }
-    65% {
-        clip-path: inset(25% 0 35% 0);
-    }
-    70% {
-        clip-path: inset(30% 0 40% 0);
-    }
-    75% {
-        clip-path: inset(40% 0 20% 0);
-    }
-    80% {
-        clip-path: inset(20% 0 50% 0);
-    }
-    85% {
-        clip-path: inset(10% 0 60% 0);
-    }
-    90% {
-        clip-path: inset(15% 0 55% 0);
-    }
-    95% {
-        clip-path: inset(25% 0 35% 0);
-    }
-    100% {
-        clip-path: inset(30% 0 40% 0);
-    }
+  0% {
+    clip-path: inset(20% 0 50% 0);
+  }
+  5% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  10% {
+    clip-path: inset(15% 0 55% 0);
+  }
+  15% {
+    clip-path: inset(25% 0 35% 0);
+  }
+  20% {
+    clip-path: inset(30% 0 40% 0);
+  }
+  25% {
+    clip-path: inset(40% 0 20% 0);
+  }
+  30% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  35% {
+    clip-path: inset(15% 0 55% 0);
+  }
+  40% {
+    clip-path: inset(25% 0 35% 0);
+  }
+  45% {
+    clip-path: inset(30% 0 40% 0);
+  }
+  50% {
+    clip-path: inset(20% 0 50% 0);
+  }
+  55% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  60% {
+    clip-path: inset(15% 0 55% 0);
+  }
+  65% {
+    clip-path: inset(25% 0 35% 0);
+  }
+  70% {
+    clip-path: inset(30% 0 40% 0);
+  }
+  75% {
+    clip-path: inset(40% 0 20% 0);
+  }
+  80% {
+    clip-path: inset(20% 0 50% 0);
+  }
+  85% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  90% {
+    clip-path: inset(15% 0 55% 0);
+  }
+  95% {
+    clip-path: inset(25% 0 35% 0);
+  }
+  100% {
+    clip-path: inset(30% 0 40% 0);
+  }
+}
+
+.pop-in {
+  animation: pop 0.5s ease-in;
+  transition: all 0.5s ease;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(25deg);
+    opacity: 1;
+  }
 }

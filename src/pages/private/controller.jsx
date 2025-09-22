@@ -107,7 +107,7 @@ const Controllter = () => {
                     <div className="avatar hidden md:block">
                       <div className="w-12 h-12  rounded-full ring ring-primary ring-offset-2">
                         <Link to={`profile/${rank.personalInfo.uid}`}>
-                          <ProfileContainer user={rank} />
+                          <ProfileContainer user={rank} size="md" />
                         </Link>
                       </div>
                     </div>

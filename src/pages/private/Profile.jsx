@@ -190,7 +190,7 @@
                         />
                       </div>
                       {user.personalInfo.avatar && (
-                        <ProfileContainer user={user} />
+                        <ProfileContainer size="md" user={user} />
                       )}
                     </div>
 
@@ -296,7 +296,7 @@
                 <div className={`w-full p-4 sm:p-6 md:p-8 rounded-2xl -xl`}>
                   {/* Header */}
                   <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6">
-                    <ProfileContainer user={user} />
+                    <ProfileContainer size="lg" user={user} />
                     <div className="text-center  sm:text-left">
                       <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center justify-center sm:justify-start gap-2">
                         {user.personalInfo.fullName} {crown}
@@ -305,7 +305,7 @@
 
                       <div className="flex justify-between items-center p-1 gap-3">
                         <div
-                          className={`inline-block px-3 py-1 rounded-full text-sm font-semibold border ${
+                          className={`inline-block px-3 py-1 rounded-full text-sm font-semibold border m-2 ${
                             roleStyles[user.personalInfo.role]?.bg || "bg-black"
                           } ${
                             roleStyles[user.personalInfo.role]?.text ||
@@ -413,14 +413,7 @@
             <div className={`w-full p-4 sm:p-6 md:p-8 rounded-2xl -xl `}>
               {/* Header */}
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6">
-                <img
-                  src={
-                    user.personalInfo.avatar ||
-                    `https://ui-avatars.com/api/?name=${user.personalInfo.fullName}`
-                  }
-                  alt="avatar"
-                  className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 ${avatarGlow}`}
-                />
+                <ProfileContainer user={user} size="lg" className="ring-base-content ring-4" />
                 <div className="text-center sm:text-left">
                   <h2 className="text-2xl sm:text-3xl font-bold text-white flex items-center justify-center sm:justify-start gap-2">
                     {user.personalInfo.fullName} {crown}

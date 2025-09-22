@@ -9,7 +9,7 @@ export default function LandingPage() {
       {/* Header Badge */}
       <div className="mb-4">
         <span className="badge badge-lg badge-success badge-outline">
-          🌱 Smart India Hackathon 2025 By Team <span className="text-blue-400">HexaNova</span>
+          🌱 Smart India Hackathon 2025 ~ <span className="text-blue-400 hidden md:block">HexaNova</span>
         </span>
       </div>
 
