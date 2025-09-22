@@ -16,6 +16,7 @@ import Activity from "./pages/private/Activity";
 import GlitchText from "./components/animated/Glitch.jsx";
 import Analytic from "./pages/private/Analytic.jsx";
 import Task from "./pages/private/Task.jsx";
+import Achievements from "./pages/private/achievements.jsx";
 
 const App = () => {
   const navigate = useNavigate();
@@ -74,6 +75,8 @@ const App = () => {
           <Route path="analytics/:id" element={<Analytic />} />
           <Route path="Activity" element={<Activity />} />
           <Route path="tasks/:id" element={<Task />} />
+          <Route path="achievements" element={<Achievements />} />
+          <Route path="notifications" element="No Notification yet !" />
         </Route>
 
         <Route

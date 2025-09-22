@@ -15,6 +15,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { updateDoc } from "firebase/firestore";
+import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -28,6 +29,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 export async function signUpWithCredentials(email, password, structure) {
   const userCredential = await createUserWithEmailAndPassword(
@@ -185,4 +187,36 @@ export async function addBadge(badge, uid) {
     console.error("Error adding badge:", error);
     throw error;
   }
+}
+
+// Upload a video proof to Firebase Storage and return its download URL
+export async function uploadVideoProof(file, uid, challengeId, onProgress) {
+  if (!file) throw new Error("file is required");
+  const safeUid = uid || "anonymous";
+  const folder = challengeId || "general";
+  const filename = `${Date.now()}_${file.name || 'proof.mp4'}`;
+  const path = `proofs/${safeUid}/${folder}/${filename}`;
+  const ref = storageRef(storage, path);
+
+  return new Promise((resolve, reject) => {
+    const task = uploadBytesResumable(ref, file);
+    task.on(
+      'state_changed',
+      (snapshot) => {
+        if (onProgress && snapshot.totalBytes) {
+          const pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          onProgress(pct);
+        }
+      },
+      (err) => reject(err),
+      async () => {
+        try {
+          const url = await getDownloadURL(task.snapshot.ref);
+          resolve(url);
+        } catch (e) {
+          reject(e);
+        }
+      }
+    );
+  });
 }

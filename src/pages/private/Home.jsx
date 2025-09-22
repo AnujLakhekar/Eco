@@ -30,7 +30,7 @@ const ControlPanel = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 pop-in">
         <div className="mx-auto max-w-7xl px-3 py-2">
-          <div className="navbar rounded-2xl border border-base-300/30 bg-base-100/40 backdrop-blur-xl shadow-lg">
+          <div className="navbar rounded-2xl border border-base-300/30 bg-base-100/40 backdrop-blur-xl ">
             {/* Brand */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}

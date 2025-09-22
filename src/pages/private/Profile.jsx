@@ -316,16 +316,25 @@
                         </div>
 
                         <div className="flex gap-2 bg-neutral p-1 rounded-2xl w-auto">
-                          {user.gamification.badges.map((b, i) => {
-                            return (
-                              <div
-                                key={i}
-                                className="inline-block px-3 py-1 rounded-full text-sm font-semibold border"
-                              >
-                                {b}
+                          <div className="avatar-group -space-x-4">
+                            {user.gamification?.badges?.slice(0,3).map((b, i) => (
+                              <div key={i} className="avatar tooltip" data-tip={b}>
+                                <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                  <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(b)}&background=random&color=fff&bold=true`} alt={b} />
+                                </div>
                               </div>
-                            );
-                          })}
+                            ))}
+                            {user.gamification?.badges?.length > 3 && (
+                              <div className="avatar placeholder">
+                                <div className="w-10 rounded-full bg-base-300 text-base-content">
+                                  <span>+{user.gamification.badges.length - 3}</span>
+                                </div>
+                              </div>
+                            )}
+                            {(!user.gamification?.badges || user.gamification.badges.length === 0) && (
+                              <div className="text-xs px-2 py-1 opacity-70">No badges</div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -431,17 +440,26 @@
                       {user.personalInfo.role}
                     </div>
 
-                    <div className="flex gap-2 bg-neutral p-1 rounded-2xl w-auto">
-                      {user.gamification.badges.map((b, i) => {
-                        return (
-                          <div
-                            key={i}
-                            className="inline-block px-3 py-1 rounded-full text-sm font-semibold border"
-                          >
-                            {b}
+                    <div className="flex gap-2 bg-neutral p-1 rounded-2xl w-auto m-2">
+                      <div className="avatar-group -space-x-4">
+                        {user.gamification?.badges?.slice(0,3).map((b, i) => (
+                          <div key={i} className="avatar tooltip" data-tip={b}>
+                            <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                              <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(b)}&background=random&color=fff&bold=true`} alt={b} />
+                            </div>
                           </div>
-                        );
-                      })}
+                        ))}
+                        {user.gamification?.badges?.length > 3 && (
+                          <div className="avatar placeholder">
+                            <div className="w-10 rounded-full bg-base-300 text-base-content">
+                              <span>+{user.gamification.badges.length - 3}</span>
+                            </div>
+                          </div>
+                        )}
+                        {(!user.gamification?.badges || user.gamification.badges.length === 0) && (
+                          <div className="text-xs px-2 py-1 opacity-70">No badges</div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -475,7 +493,7 @@
               </div>
 
               {/* School & College mockup code block */}
-              <div className="mockup-code bg-primary text-primary-content w-full mb-4">
+              <div className="mockup-code bg-primary text-primary-content w-full mb-4 p-2">
                 <pre>
                   <code>
                     School/College:{" "}

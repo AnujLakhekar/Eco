@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { challenges } from "../../constant";
 import { addBadge } from "../../api/firebase";
+import { analyzeVideoClient } from "../../api/geminiClient";
 import { useAuth } from "../../providers/AuthPrpvider";
 
 const Task = () => {
@@ -12,6 +13,7 @@ const Task = () => {
   const [isTrue, setIsTrue] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [status, setStatus] = useState("");
+  const [analysisResult, setAnalysisResult] = useState(null);
   const intervalRef = useRef(null);
   const { user } = useAuth();
 
@@ -50,30 +52,37 @@ const Task = () => {
     }
   }
 
-  const startInspect = () => {
+  const startInspect = async () => {
     if (!videoFile || inspecting) return;
-    setInspecting(true);
-    setProgress(0);
-    setStatus("Uploading video...");
-    let p = 0;
-    intervalRef.current = setInterval(() => {
-      p += 5;
-      if (p <= 50) {
-        setStatus("Uploading video...");
-      } else if (p <= 90) {
-        setStatus("Analyzing video...");
+    try {
+      setInspecting(true);
+      setProgress(0);
+      setStatus("Analyzing video with Gemini...");
+      setAnalysisResult(null);
+
+  // Analyze on client using Gemini SDK
+  const analysis = await analyzeVideoClient(videoFile);
+
+      // 3) Finalize
+      setProgress(100);
+      // Persist structured result for UI
+      setAnalysisResult(analysis);
+      setProgress(100);
+      // Prefer description and then simple verdict
+      if (analysis?.description) {
+        setStatus(analysis.description);
       } else {
-        setStatus("Finalizing...");
+        const isValid = analysis?.data?.isTrue ?? false;
+        const verdict = isValid ? "Inspection complete: Valid ✅" : "Inspection complete: Not Valid ❌";
+        setStatus(verdict);
       }
-      setProgress(p);
-      if (p >= 100) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-        setInspecting(false);
-        setStatus("Inspection complete");
-        setIsTrue(true);
+      setIsTrue(!!analysis?.data?.isTrue);
+    } catch (e) {
+      console.error("inspect error", e);
+      setStatus("Inspection failed. Try again.");
+    } finally {
+      setInspecting(false);
       }
-    }, 50);
   };
 
   const resetAll = () => {
@@ -84,6 +93,7 @@ const Task = () => {
     setProgress(0);
     setStatus("");
     setInspecting(false);
+    setAnalysisResult(null);
   };
 
   const { id } = useParams();
@@ -143,6 +153,48 @@ const Task = () => {
 
             {!inspecting && status && (
               <div className="mt-2 text-sm text-success">{status}</div>
+            )}
+
+            {/* Analysis details: category, confidence, reasoning */}
+            {analysisResult?.data && (
+              <div className="mt-3 p-3 rounded-lg bg-base-200">
+                <div className="flex flex-wrap items-center gap-2">
+                  {analysisResult.data.category && (
+                    <span className="badge badge-info">
+                      Category: {analysisResult.data.category}
+                    </span>
+                  )}
+                  {typeof analysisResult.data.confidence === "number" && (
+                    <span className="badge badge-ghost">
+                      Confidence: {Math.round(analysisResult.data.confidence * 100)}%
+                    </span>
+                  )}
+                  {typeof analysisResult.data.isTrue === "boolean" && (
+                    <span className={`badge ${analysisResult.data.isTrue ? "badge-success" : "badge-error"}`}>
+                      {analysisResult.data.isTrue ? "Valid" : "Not Valid"}
+                    </span>
+                  )}
+                </div>
+                {analysisResult.data.reasoning && (
+                  <div className="mt-2 text-sm opacity-80">
+                    Reasoning: {analysisResult.data.reasoning}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Validation or parsing errors */}
+            {analysisResult?.errors?.length > 0 && (
+              <div className="mt-3 alert alert-warning">
+                <span>
+                  Output validation issues:
+                  <ul className="list-disc ml-5 mt-1">
+                    {analysisResult.errors.map((e, i) => (
+                      <li key={i} className="text-xs">{e}</li>
+                    ))}
+                  </ul>
+                </span>
+              </div>
             )}
 
             {isTrue ? (
